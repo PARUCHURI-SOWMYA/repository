@@ -1,7 +1,13 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt
+
+# Attempt to import matplotlib and handle errors if missing
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    st.error("matplotlib is required for displaying images. Please install matplotlib.")
+    raise
 
 def preprocess_image(image):
     """
