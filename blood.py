@@ -2,13 +2,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 
-# Attempt to import matplotlib and handle errors if missing
-try:
-    import matplotlib.pyplot as plt
-except ImportError:
-    st.error("matplotlib is required for displaying images. Please install matplotlib.")
-    raise
-
 def preprocess_image(image):
     """
     Preprocess the image: resize and convert it to grayscale for further processing.
@@ -29,15 +22,6 @@ def preprocess_image(image):
         print(f"Error processing the image: {e}")
         return None
 
-def display_image(image, title="Processed Image"):
-    """
-    Display the processed image using matplotlib.
-    """
-    plt.imshow(image, cmap='gray')  # Display the image in grayscale
-    plt.axis('off')  # Hide axes for better display
-    plt.title(title)
-    plt.show()  # Display the image in the same window
-
 def main():
     st.title("Blood Group Detection from Finger Image")
 
@@ -48,7 +32,7 @@ def main():
         # Open the image using PIL
         image = Image.open(uploaded_image)
 
-        # Display the original image
+        # Display the original image using Streamlit's built-in image display
         st.image(image, caption="Uploaded Image", use_column_width=True)
 
         # Process the image
@@ -58,8 +42,8 @@ def main():
             # Image processed, print success message
             st.success("Image processed successfully.")
 
-            # Display the processed image
-            display_image(result_image)
+            # Display the processed image using Streamlit's built-in image display
+            st.image(result_image, caption="Processed Grayscale Image", use_column_width=True, clamp=True)
 
             # Optionally, you can save the processed image
             st.write("Processed grayscale image is ready.")
