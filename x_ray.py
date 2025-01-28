@@ -3,16 +3,21 @@ from PIL import Image
 import numpy as np
 import io
 
-# Attempt to import TensorFlow and handle any import errors
+# Attempt to import TensorFlow and handle any import errors gracefully
 try:
     import tensorflow as tf
     st.write("TensorFlow successfully imported!")
 except ModuleNotFoundError:
     st.write("TensorFlow is not installed. Please install it by running `pip install tensorflow`.")
-    raise
+    st.stop()  # Stop the execution of the app if TensorFlow is not installed
 
-# Load the pre-trained model (assuming 'brain_tumor_model.h5' is present in your working directory)
-model = tf.keras.models.load_model('brain_tumor_model.h5')
+# Check if the model file exists, otherwise provide an error message.
+try:
+    # Load the pre-trained model (assuming 'brain_tumor_model.h5' is present in your working directory)
+    model = tf.keras.models.load_model('brain_tumor_model.h5')
+except Exception as e:
+    st.write(f"Error loading model: {e}")
+    st.stop()  # Stop the execution if the model cannot be loaded
 
 # Define the image size that the model expects
 IMG_SIZE = 224
