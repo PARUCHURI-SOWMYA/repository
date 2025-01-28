@@ -1,7 +1,6 @@
 import streamlit as st
 from PIL import Image
 import numpy as np
-import cv2
 import matplotlib.pyplot as plt
 
 def preprocess_image(image):
@@ -16,7 +15,7 @@ def preprocess_image(image):
         img_array = np.array(img)
 
         # Convert to grayscale
-        gray_img = cv2.cvtColor(img_array, cv2.COLOR_RGB2GRAY)
+        gray_img = np.dot(img_array[...,:3], [0.2989, 0.5870, 0.1140])  # Convert to grayscale manually
 
         # Return processed image
         return gray_img
@@ -24,13 +23,14 @@ def preprocess_image(image):
         print(f"Error processing the image: {e}")
         return None
 
-def display_image(image):
+def display_image(image, title="Processed Image"):
     """
     Display the processed image using matplotlib.
     """
     plt.imshow(image, cmap='gray')  # Display the image in grayscale
     plt.axis('off')  # Hide axes for better display
-    st.pyplot(plt)  # Display the image in Streamlit
+    plt.title(title)
+    plt.show()  # Display the image in the same window
 
 def main():
     st.title("Blood Group Detection from Finger Image")
@@ -51,13 +51,12 @@ def main():
         if result_image is not None:
             # Image processed, print success message
             st.success("Image processed successfully.")
-            
+
             # Display the processed image
             display_image(result_image)
 
             # Optionally, you can save the processed image
-            cv2.imwrite("processed_image_grayscale.jpg", result_image)
-            st.write("Processed image saved as 'processed_image_grayscale.jpg'.")
+            st.write("Processed grayscale image is ready.")
         else:
             st.error("Error processing the image.")
     else:
